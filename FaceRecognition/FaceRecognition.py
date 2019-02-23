@@ -5,6 +5,28 @@ import cv2
 input_video = cv2.VideoCapture(0)
 length = int(input_video.get(cv2.CAP_PROP_FRAME_COUNT))
 
+image_objects = []
+image_names = []
+image_encodings = []
+known_faces = []
+
+def populate_images(image_object_list):
+    image_objects = image_object_list
+
+def populate_image_names(image_name_list):
+    image_names = image_name_list
+
+def populate_image_encodings():
+    i = 0
+    for image_object in image_objects:
+        image_loader = face_recognition.load_image_file(image_objects[i])
+        image_encodings.append(face_recognition.face_encodings(image_loader)[0])
+
+def populate_known_faces():
+    i = 0
+    for face_encoding in face_encodings:
+        known_faces.append()
+
 #This is an image of the hottest person on the planet aka Vishnu
 vishnu_image = face_recognition.load_image_file("VishnuTest.jpg")
 vishnu_face_encoding = face_recognition.face_encodings(vishnu_image)[0]
