@@ -48,7 +48,7 @@ def set_up():
 def recordVideo():
     cap = cv2.VideoCapture(0) # Capture video from camera
     start_time = time.time()
-    seconds_to_record = 10
+    seconds_to_record = 60
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
     fps = 6.0
