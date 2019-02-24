@@ -24,23 +24,14 @@ def populate_images(image_objects):
 def set_up(faces):
     image_objects = []
     image_objects = populate_images(image_objects)
-    #This is an image of the hottest person on the planet aka Vishnu
-    vishnu_image = face_recognition.load_image_file('images/0.jpg')
-    vishnu_face_encoding = face_recognition.face_encodings(vishnu_image)[0]
 
-    #This is an image of thesecond hottest person on the planet
-    bhavesh_image = face_recognition.load_image_file('images/1.jpg')
-    bhavesh_face_encoding = face_recognition.face_encodings(bhavesh_image)[0]
+    face_encodings = []
 
-    pablo_image = face_recognition.load_image_file('images/2.jpg')
-    pablo_face_encoding = face_recognition.face_encodings(pablo_image)[0]
+    for image in image_objects:
+        face_encodings.append(face_recognition.face_encodings(image)[0])
 
-    #Establishing my array of known faces
-    faces = [
-        vishnu_face_encoding,
-        bhavesh_face_encoding,
-        pablo_face_encoding
-    ]
+    faces = face_encodings
+    
 
     return faces
 
@@ -84,6 +75,8 @@ def run_face_detection(input_video, kfaces, frame_number):
                 name = "Bhavesh"
             elif match[2]:
                 name = "Pablo"
+            elif match[3]:
+                name = "Sumeet"
 
             #Addes the name of the face to the name of the faces
             face_names.append(name)
