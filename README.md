@@ -22,10 +22,10 @@ Other Dependencies - CMake (Guide for installing CMake on your OS: https://cmake
 You can run our program with a conventional python StreamRecognition.py command in the working directory of the code. Our images for testing and training are stored in the images directory and follows a naming format - “num_imagePerson_Name.jpg” (example 01Vishnu.jpg). You can add more images and remove to tune your image recognition model. Just change the path file and the image extraction method accordingly. Additionally, boxes with a green overlay mean that the face is from one of the images dropped in with the name, and red means it is a new person. Any time a red box pops up, the script records the stream and will save a video of the person.
 
 ## OTHER SOURCES OF DOCUMENTATION
-https://face-recognition.readthedocs.io/en/latest/face_recognition.html
+[Face Recognition API](https://face-recognition.readthedocs.io/en/latest/face_recognition.html)
 
 ## Contributor Guide
-[(CONTRIBUTING.md)] / CONTRIBUTING.md
+[CONTRIBUTING.md](/CONTRIBUTING.md)
 
 ## License
 The Watchman project is licensed under the MIT License. 
