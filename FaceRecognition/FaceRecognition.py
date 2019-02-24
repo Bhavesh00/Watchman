@@ -18,6 +18,15 @@ def populate_images(image_objects):
         image_objects.append(im)
     return image_objects
 
+def get_names(image_names):
+    filenames = [img for img in glob.glob("images/*.jpg")]
+    filenames.sort() # ADD THIS LINE
+    image_names = []
+    for name in filenames:
+        s = name[7 : -4]
+        image_names.append(''.join([i for i in s if not i.isdigit()]))
+    return image_names
+
 def set_up(faces):
     image_objects = []
     image_objects = populate_images(image_objects)
@@ -34,7 +43,7 @@ def set_up(faces):
     return faces
 
 
-def run_face_detection(input_video, kfaces, frame_number):
+def run_face_detection(input_video, kfaces, frame_number, names):
     face_locations = []
     face_encodings = []
     face_names = []
@@ -54,7 +63,7 @@ def run_face_detection(input_video, kfaces, frame_number):
         rgb_frame = frame[:, :, ::-1]
 
         #This passes in the locations of the faces
-        face_locations = face_recognition.face_locations(rgb_frame)
+        face_locations = face_recognition.face_locations(rgb_frame, model = "cnn")
 
         #This sets up the face encoding section from the  image stream
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
@@ -66,18 +75,18 @@ def run_face_detection(input_video, kfaces, frame_number):
         for face_encoding in face_encodings:
             
             #Compares the current face_encoding object with thee set of known faces to find a match
-            match = face_recognition.compare_faces(kfaces, face_encoding, tolerance=0.5)
+            match = face_recognition.compare_faces(kfaces, face_encoding, tolerance = 0.4)
 
             #Annotates the images with the names
             name = None
             if match[0]:
-                name = "Vishnu"
+                name = names[0]
             elif match[1]:
-                name = "Bhavesh"
+                name = names[1]
             elif match[2]:
-                name = "Pablo"
+                name = names[2]
             elif match[3]:
-                name = "Sumeet"
+                name = names[3]
 
             #Addes the name of the face to the name of the faces
             face_names.append(name)
@@ -112,8 +121,10 @@ def _main_():
     input_video = cv2.VideoCapture(0)
     frame_number = 0
     known_faces = []
+    names = []
     kf = set_up(known_faces)
-    run_face_detection(input_video, kf, frame_number)
+    list_of_names = get_names(names)
+    run_face_detection(input_video, kf, frame_number, list_of_names)
 
 
 
