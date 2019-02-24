@@ -47,7 +47,6 @@ def run_face_detection(input_video, kfaces, frame_number, names):
     face_locations = []
     face_encodings = []
     face_names = []
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml') 
     #While the video stream is on
     while True:
         ret, frame = input_video.read()
@@ -56,14 +55,11 @@ def run_face_detection(input_video, kfaces, frame_number, names):
         if not ret:
             break
 
-        gray = cv2.cvtColor(frame, cv2.IMREAD_GRAYSCALE)
-        faces = face_cascade.detectMultiScale(gray, 1.5, 5)
-
         #This is the conversion between rgb and bgr
         rgb_frame = frame[:, :, ::-1]
 
         #This passes in the locations of the faces
-        face_locations = face_recognition.face_locations(rgb_frame, model = "cnn")
+        face_locations = face_recognition.face_locations(rgb_frame, model = "hog")
 
         #This sets up the face encoding section from the  image stream
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
@@ -78,15 +74,15 @@ def run_face_detection(input_video, kfaces, frame_number, names):
             match = face_recognition.compare_faces(kfaces, face_encoding, tolerance = 0.4)
 
             #Annotates the images with the names
+
             name = None
-            if match[0]:
-                name = names[0]
-            elif match[1]:
-                name = names[1]
-            elif match[2]:
-                name = names[2]
-            elif match[3]:
-                name = names[3]
+            iterator = 0
+            for result in match:
+                if result:
+                    name = names[iterator]
+                else:
+                    iterator += 1
+                    continue
 
             #Addes the name of the face to the name of the faces
             face_names.append(name)
@@ -94,10 +90,11 @@ def run_face_detection(input_video, kfaces, frame_number, names):
         #This sets up the boxes and draws around the images
         for (top, right, bottom, left), name in zip(face_locations, face_names):
             if not name:
-                for (x,y,w,h) in faces: 
-                    cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)  
-                    roi_gray = gray[y:y+h, x:x+w] 
-                    roi_color = frame[y:y+h, x:x+w] 
+                for (x,y,w,h) in face_locations: 
+                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                    #This sets up the rectangle around the face in green filled
+                    cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+                    font = cv2.FONT_HERSHEY_DUPLEX
             else:
                 #This sets up the rectangle around thee face in green
                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
