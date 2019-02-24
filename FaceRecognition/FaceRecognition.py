@@ -10,7 +10,6 @@ import glob
 #Setting up a video capture stream
 
 def populate_images(image_objects):
-
     filenames = [img for img in glob.glob("images/*.jpg")]
     filenames.sort() # ADD THIS LINE
     for img in filenames: #assuming jpg
@@ -19,20 +18,19 @@ def populate_images(image_objects):
         image_objects.append(im)
     return image_objects
 
-
-
 def set_up(faces):
     image_objects = []
     image_objects = populate_images(image_objects)
 
+    #Make a new face encoding list to pass in image objects into the list 
     face_encodings = []
 
+    #Iterating through the list to get the images with the encoding method to 128 pixels
     for image in image_objects:
         face_encodings.append(face_recognition.face_encodings(image)[0])
 
     faces = face_encodings
     
-
     return faces
 
 
@@ -40,7 +38,7 @@ def run_face_detection(input_video, kfaces, frame_number):
     face_locations = []
     face_encodings = []
     face_names = []
-    print(kfaces)
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml') 
     #While the video stream is on
     while True:
         ret, frame = input_video.read()
@@ -48,6 +46,9 @@ def run_face_detection(input_video, kfaces, frame_number):
 
         if not ret:
             break
+
+        gray = cv2.cvtColor(frame, cv2.IMREAD_GRAYSCALE)
+        faces = face_cascade.detectMultiScale(gray, 1.5, 5)
 
         #This is the conversion between rgb and bgr
         rgb_frame = frame[:, :, ::-1]
@@ -84,18 +85,20 @@ def run_face_detection(input_video, kfaces, frame_number):
         #This sets up the boxes and draws around the images
         for (top, right, bottom, left), name in zip(face_locations, face_names):
             if not name:
-                continue
+                for (x,y,w,h) in faces: 
+                    cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)  
+                    roi_gray = gray[y:y+h, x:x+w] 
+                    roi_color = frame[y:y+h, x:x+w] 
+            else:
+                #This sets up the rectangle around thee face in green
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+                #This sets up the rectangle around the face in green filled
+                cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 255, 0), cv2.FILLED)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                #
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
 
-            #This sets up the rectangle around thee face in green
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-
-            #This sets up the rectangle around the face in green filled
-            cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 255, 0), cv2.FILLED)
-            font = cv2.FONT_HERSHEY_DUPLEX
-            #
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
-
-
+            
         print("Writing frame {}".format(frame_number))
         cv2.imshow('frame', frame)
 
