@@ -1,7 +1,8 @@
-import face_recognition
+mport face_recognition
 import cv2
 from PIL import Image
 import glob
+import time
 
 
 #This is arrays for the locations of the faces, encodings and the names associated with the faces
@@ -9,11 +10,11 @@ import glob
 
 #Setting up a video capture stream
 
+
 def populate_images(image_objects):
     filenames = [img for img in glob.glob("images/*.jpg")]
     filenames.sort() # ADD THIS LINE
     for img in filenames: #assuming jpg
-        print(img)
         im = face_recognition.load_image_file(img)
         image_objects.append(im)
     return image_objects
@@ -42,11 +43,39 @@ def set_up(faces):
     
     return faces
 
+def recordVideo():
+    cap = cv2.VideoCapture(0) # Capture video from camera
+
+    start_time = time.time()
+    seconds_to_record = 3
+
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
+    fps = 24.0
+
+    # Define the codec and create VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('output.mp4', fourcc, fps, (width, height))
+
+    while (int(time.time() - start_time) < seconds_to_record):
+        ret, frame = cap.read()
+        if ret == True:
+            out.write(frame)
+
+            cv2.imshow('frame',frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    out.release()
+    cap.release()
+    cv2.destroyAllWindows()
 
 def run_face_detection(input_video, kfaces, frame_number, names):
     face_locations = []
     face_encodings = []
     face_names = []
+    num_recording = 0
     #While the video stream is on
     while True:
         ret, frame = input_video.read()
@@ -95,6 +124,11 @@ def run_face_detection(input_video, kfaces, frame_number, names):
                     #This sets up the rectangle around the face in green filled
                     cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
                     font = cv2.FONT_HERSHEY_DUPLEX
+                    if num_recording < 1:
+                        print("Recording Video of Unknown Person(s)")
+                        recordVideo()
+                        num_recording += 1
+                        
             else:
                 #This sets up the rectangle around thee face in green
                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
@@ -114,7 +148,7 @@ def run_face_detection(input_video, kfaces, frame_number, names):
             input_video.release()
             cv2.destroyAllWindows()
     
-def _main_():
+def main():
     input_video = cv2.VideoCapture(0)
     frame_number = 0
     known_faces = []
@@ -123,12 +157,4 @@ def _main_():
     list_of_names = get_names(names)
     run_face_detection(input_video, kf, frame_number, list_of_names)
 
-
-
-
-
-
-
-
-
-
+main()
