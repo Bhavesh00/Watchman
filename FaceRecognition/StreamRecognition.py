@@ -13,7 +13,8 @@ import threading
 #Setting up a video capture stream
 
 #Populating the image objects from the directory
-def populate_images(image_objects):
+def populate_images():
+    image_objects = []
     filenames = [img for img in glob.glob("images/*.jpg")]
     filenames.sort() # ADD THIS LINE
     for img in filenames: #assuming jpg
@@ -22,7 +23,8 @@ def populate_images(image_objects):
     return image_objects
 
 #Isolate the names of the images from the names of the folder
-def get_names(image_names):
+def get_names():
+
     filenames = [img for img in glob.glob("images/*.jpg")]
     filenames.sort() # ADD THIS LINE
     image_names = []
@@ -32,16 +34,15 @@ def get_names(image_names):
     return image_names
 
 #This sets up the face and encoding arrays
-def set_up(faces):
+def set_up():
     image_objects = []
-    image_objects = populate_images(image_objects)
+    image_objects = populate_images()
     #Make a new face encoding list to pass in image objects into the list 
     face_encodings = []
     #Iterating through the list to get the images with the encoding method to 128 pixels
     for image in image_objects:
         face_encodings.append(face_recognition.face_encodings(image)[0])
-    faces = face_encodings
-    return faces
+    return face_encodings
 
 #Method to record the video that is passed into the detction algorithim
 def recordVideo():
@@ -68,11 +69,13 @@ def recordVideo():
     cv2.destroyAllWindows()
 
 #Runner method for the deetection and classification algorithim
-def run_face_detection(input_video, kfaces, frame_number, names):
+def run_face_detection(known_faces, names, type_of_model):
+    input_video = cv2.VideoCapture(0)
     face_locations = []
     face_encodings = []
     face_names = []
     num_recording = 0
+    frame_number = 0
     #While the video stream is on
     while True:
         ret, frame = input_video.read()
@@ -83,7 +86,7 @@ def run_face_detection(input_video, kfaces, frame_number, names):
         #This is the conversion between rgb and bgr
         rgb_frame = frame[:, :, ::-1]
         #This passes in the locations of the faces
-        face_locations = face_recognition.face_locations(rgb_frame, model = "hog")
+        face_locations = face_recognition.face_locations(rgb_frame, model = type_of_model)
         #This sets up the face encoding section from the  image stream
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
         #This sets up an array of the face names present from the video stream
@@ -91,7 +94,7 @@ def run_face_detection(input_video, kfaces, frame_number, names):
         #Runs while there is a face encoding in the list
         for face_encoding in face_encodings:
             #Compares the current face_encoding object with thee set of known faces to find a match
-            match = face_recognition.compare_faces(kfaces, face_encoding, tolerance = 0.4)
+            match = face_recognition.compare_faces(known_faces, face_encoding, tolerance = 0.4)
 
             #Annotates the images with the names
             name = None
@@ -136,12 +139,8 @@ def run_face_detection(input_video, kfaces, frame_number, names):
 
 #Main runner
 def main():
-    input_video = cv2.VideoCapture(0)
-    frame_number = 0
-    known_faces = []
-    names = []
-    kf = set_up(known_faces)
-    list_of_names = get_names(names)
-    run_face_detection(input_video, kf, frame_number, list_of_names)
+    known_faces = set_up()
+    list_of_names = get_names()
+    run_face_detection(known_faces, list_of_names, "hog")
 
 main()
