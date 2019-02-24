@@ -50,7 +50,7 @@ def recordVideo():
     seconds_to_record = 10
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
-    fps = 5.0
+    fps = 6.0
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter('UnknownPerson.mp4', fourcc, fps, (width, height))
