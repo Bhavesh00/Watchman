@@ -1,5 +1,5 @@
 # Watchman
-“The Watchman” is a video surveillance tool which helps a given user to perform human face recognition using an existing knowledge base and validate whether the human in the given video is a threat to the user or not.
+This is a video surveillance tool which helps a given user to perform human face recognition using an existing knowledge base and validate whether the human in the given video is a threat to the user or not.
 
 ## PROJECT FEATURES
 * Human Face Recognition
