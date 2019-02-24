@@ -19,7 +19,11 @@ A usage scenario for our application is security surveillance at homes which wil
 * Pip install -- DEPENDENCY_NAME 
 * Other Dependencies - CMake (Guide for installing [CMake](https://cmake.org/install/)).
 
-You can run our program with a conventional python StreamRecognition.py command in the working directory of the code. Our images for testing and training are stored in the images directory and follows a naming format - “num_imagePerson_Name.jpg” (example 01Vishnu.jpg). You can add more images and remove to tune your image recognition model. Just change the path file and the image extraction method accordingly. Additionally, boxes with a green overlay mean that the face is from one of the images dropped in with the name, and red means it is an unkown person. Any time a red box pops up, the script records the stream and will save a video of the person for future use.
+Steps to run the application:
+  * Checkout the code from the repository
+  * Run our app with *python StreamRecognition.py* command in the working directory of the code. 
+
+Our images for testing and training are stored in the images directory and follows a naming format - “num_imagePerson_Name.jpg” (example 01Vishnu.jpg). You can add more images and remove to tune your image recognition model. Just change the path file and the image extraction method accordingly. Additionally, boxes with a green overlay mean that the face is from one of the known images, and red means it is an unknown person. Any time a red box pops up, the app records the stream and will save a video of the person for future use.
 
 ## OTHER SOURCES OF DOCUMENTATION
 [Face Recognition API](https://face-recognition.readthedocs.io/en/latest/face_recognition.html)
