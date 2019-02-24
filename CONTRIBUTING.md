@@ -1,13 +1,12 @@
 # Contributing to Watchman
 
 ## Welcome contributors to the project: 
-Thank you for your interest in contributing to Watchman, we really appreciate it! Please read through this document to understand the basics of contributing to this project. In addition, please review our Code of Conduct.
+Thank you for your interest in contributing to Watchman, we really appreciate it! Please read through this document to understand the basics of contributing to this project. In addition, please review our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Testing
 ## Development environment details
 * Python version 2.7 or 3.6
-* Operating System: MacOS, Windows
-* Dependencies - face recognition, glob, C-Make, threading, cv2 and time.
+* Operating System: MacOS, Windows, Linux
+* Dependencies - face recognition, glob, CMake, threading, cv2 and time.
 
 ## Short Links to Important Resources:
 You can learn more about the application at our [website](http://bhavesh00.github.io).
