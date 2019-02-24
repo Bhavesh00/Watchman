@@ -17,7 +17,7 @@ A usage scenario for our application is security surveillance at homes which wil
 * Operating System: MacOS, Windows, Linux
 * Main Dependencies - face recognition, glob, threading, cv2 and time.
 * Pip install -- DEPENDENCY_NAME 
-* Other Dependencies - CMake (Guide for installing [CMake](https://cmake.org/install/).
+* Other Dependencies - CMake (Guide for installing [CMake](https://cmake.org/install/)).
 
 You can run our program with a conventional python StreamRecognition.py command in the working directory of the code. Our images for testing and training are stored in the images directory and follows a naming format - “num_imagePerson_Name.jpg” (example 01Vishnu.jpg). You can add more images and remove to tune your image recognition model. Just change the path file and the image extraction method accordingly. Additionally, boxes with a green overlay mean that the face is from one of the images dropped in with the name, and red means it is a new person. Any time a red box pops up, the script records the stream and will save a video of the person.
 
